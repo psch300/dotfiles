@@ -1,0 +1,9 @@
+*
+
+!.gitignore
+
+!.config/
+!.config/nvim/
+!.config/nvim/**/*
+!.config/nvim/lua/config/plugins/**/*
+!README.md
