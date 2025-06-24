@@ -142,4 +142,10 @@ return {
       "nvim-lua/plenary.nvim",
     },
   },
+
+  -- Smear Cursor
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  },
 }
