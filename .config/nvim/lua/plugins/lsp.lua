@@ -1,7 +1,7 @@
 return {
   -- tools
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "luacheck",
@@ -58,6 +58,11 @@ return {
           },
         },
         html = {},
+        eslint = {
+          settings = {
+            workingDirectories = { mode = "auto" },
+          },
+        },
         lua_ls = {
           -- enabled = false,
           single_file_support = true,
