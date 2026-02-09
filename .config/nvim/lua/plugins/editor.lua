@@ -43,6 +43,14 @@ return {
         desc = "Lists open buffers",
       },
       {
+        ";b",
+        function()
+          local builtin = require("telescope.builtin")
+          builtin.buffers()
+        end,
+        desc = "Lists open buffers",
+      },
+      {
         ";;",
         function()
           local builtin = require("telescope.builtin")
