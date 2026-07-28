@@ -8,7 +8,6 @@ return {
         "shellcheck",
         "shfmt",
         "tailwindcss-language-server",
-        "typescript-language-server",
         "css-lsp",
       })
     end,
@@ -18,7 +17,10 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      inlay_hints = { enabled = true },
+      -- off by default: inlay hints fire a textDocument/inlayHint request on every
+      -- change and scroll, which is the main source of typing lag in big TS repos.
+      -- toggle per-buffer with <leader>uh when you actually want them.
+      inlay_hints = { enabled = false },
       ---@type lspconfig.options
       servers = {
         cssls = {},
@@ -27,32 +29,15 @@ return {
             return require("lspconfig.util").root_pattern(".git")(...)
           end,
         },
-        tsserver = {
-          root_dir = function(...)
-            return require("lspconfig.util").root_pattern(".git")(...)
-          end,
-          single_file_support = false,
+        vtsls = {
           settings = {
             typescript = {
-              inlayHints = {
-                includeInlayParameterNameHints = "literal",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = false,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
+              preferences = {
+                -- don't crawl node_modules for auto-import candidates
+                includePackageJsonAutoImports = "off",
               },
-            },
-            javascript = {
-              inlayHints = {
-                includeInlayParameterNameHints = "all",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
+              tsserver = {
+                maxTsServerMemory = 4096,
               },
             },
           },
@@ -61,6 +46,11 @@ return {
         eslint = {
           settings = {
             workingDirectories = { mode = "auto" },
+            -- lint on save instead of on every keystroke: the repo root .eslintrc
+            -- runs prettier/prettier, so onType reformats the whole file as you type
+            run = "onSave",
+            -- conform.nvim already runs prettier on save
+            format = false,
           },
         },
         lua_ls = {
@@ -131,12 +121,5 @@ return {
       },
       setup = {},
     },
-  },
-  {
-    "nvim-cmp",
-    dependencies = { "hrsh7th/cmp-emoji" },
-    opts = function(_, opts)
-      table.insert(opts.sources, { name = "emoji" })
-    end,
   },
 }

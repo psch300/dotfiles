@@ -144,8 +144,11 @@ return {
   },
 
   -- Smear Cursor
+  -- disabled: animates a redraw on every cursor move, same reason
+  -- vim.g.snacks_animate is off. flip to true to bring it back.
   {
     "sphamba/smear-cursor.nvim",
+    enabled = false,
     opts = {},
   },
 }
